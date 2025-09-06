@@ -4,3 +4,4 @@ python-dotenv
 openai
 reportlab
 psycopg2-binary
+gunicorn
