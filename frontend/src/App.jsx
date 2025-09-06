@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ChatMessage from './components/ChatMessage.jsx';
-const API_BASE = "https://ledger-backend-c5t9.onrender.com";
-
+const API_BASE = import.meta.env.VITE_API_BASE || "https://ledger-backend-c5t9.onrender.com";
 /* =====================================================================================
    Helpers
 ===================================================================================== */
