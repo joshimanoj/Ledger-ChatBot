@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ChatMessage from './components/ChatMessage.jsx';
+const API_BASE = "https://ledger-backend-c5t9.onrender.com";
 
 /* =====================================================================================
    Helpers
@@ -51,7 +52,7 @@ function parseInvoiceItem(line){
   return { description:m[1].trim(), price:parseFloat(m[2]), gstPercent:parseFloat(m[3]) };
 }
 async function apiCreateInvoice(payload){
-  return fetch('http://localhost:5001/api/invoices',{
+  return fetch(`${API_BASE}/api/invoices`,{
     method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
   });
 }
@@ -60,25 +61,25 @@ async function apiCreateInvoice(payload){
    Backend API
 ===================================================================================== */
 async function apiGetUser(mobile){
-  const r=await fetch(`http://localhost:5001/api/user/${mobile}`);
+  const r=await fetch(`${API_BASE}/api/user/${mobile}`);
   if(!r.ok) return null;
   return await r.json();
 }
 async function apiRegister(mobile,name){
-  const r=await fetch('http://localhost:5001/api/register',{
+  const r=await fetch(`${API_BASE}/api/register`,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({mobile,name})
   });
   return r.ok;
 }
 async function apiListEntries(mobile){
-  const r=await fetch(`http://localhost:5001/api/user/${mobile}/entries`);
+  const r=await fetch(`${API_BASE}/api/user/${mobile}/entries`);
   if(!r.ok) return [];
   const d=await r.json();
   return d.items||[];
 }
 async function apiAddEntries(mobile,items){
-  const r=await fetch(`http://localhost:5001/api/user/${mobile}/entries`,{
+  const r=await fetch(`${API_BASE}/api/user/${mobile}/entries`,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({items})
   });
@@ -86,7 +87,7 @@ async function apiAddEntries(mobile,items){
 }
 async function apiParseLLM(text){
   try{
-    const r=await fetch('http://localhost:5001/api/parseMessage',{
+    const r=await fetch(`${API_BASE}/api/parseMessage`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({message:text})
     });
@@ -106,17 +107,17 @@ async function apiIngestInvoice(mobile,file){
   const fd=new FormData();
   fd.append('mobile',mobile);
   fd.append('file',file);
-  const r=await fetch('http://localhost:5001/api/ingestInvoice',{method:'POST',body:fd});
+  const r=await fetch(`${API_BASE}/api/ingestInvoice`,{method:'POST',body:fd});
   const d=await r.json();
   return {ok:r.ok,data:d};
 }
 async function apiGetSettings(mobile){
-  const r=await fetch(`http://localhost:5001/api/user/${mobile}/settings`);
+  const r=await fetch(`${API_BASE}/api/user/${mobile}/settings`);
   if(!r.ok) return null;
   return await r.json();
 }
 async function apiUpdateSettings(mobile,payload){
-  const r=await fetch(`http://localhost:5001/api/user/${mobile}/settings`,{
+  const r=await fetch(`${API_BASE}/api/user/${mobile}/settings`,{
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify(payload)
   });
